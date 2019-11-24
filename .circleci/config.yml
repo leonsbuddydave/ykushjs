@@ -8,6 +8,10 @@ workflows:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
               only: /.*/
+      - test-node12:
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /.*/
       - test-node-latest:
           filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
@@ -15,6 +19,7 @@ workflows:
       - publish:
           requires:
             - test-node10
+            - test-node12
             - test-node-latest
           filters:
             tags:
@@ -29,7 +34,9 @@ defaults: &defaults
     - image: circleci/node:10.14.1
   steps:
     - checkout
-    - run: node --version > _tmp_file
+    - run: |
+        node --version
+        node --version > _tmp_file
     - run:
         name: install libusb
         command: sudo apt install -y libusb-1.0-0
@@ -67,6 +74,10 @@ defaults: &defaults
 jobs:
   test-node10:
     <<: *defaults
+  test-node12:
+    <<: *defaults
+    docker:
+      - image: circleci/node:12.13.1
   test-node-latest:
     <<: *defaults
     docker:

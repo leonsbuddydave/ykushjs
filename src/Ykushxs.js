@@ -25,7 +25,7 @@ module.exports = class Ykushxs extends Ykush {
         return Ykush._runYkushCmd(args, this.logger);
     }
 
-    static async list(logger) {
+    static async list(logger = Ykush.dummyLogger) {
         return Ykush._list(logger, Ykushxs.Prefix);
     }
 };

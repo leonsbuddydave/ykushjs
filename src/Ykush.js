@@ -5,10 +5,11 @@ const invariant = require('invariant');
 
 const ykushcmdPath = path.join(__dirname, '..', 'bin', process.platform);
 const YkushCmd = path.join(ykushcmdPath, 'ykushcmd');
+const dummyLogger = {debug: () => {}, silly: () => {}};
 
 
 class Ykush {
-    constructor(serialNumber, {logger}) {
+    constructor(serialNumber, {logger = dummyLogger} = {}) {
         this._serialNumber = serialNumber;
         this.logger = logger;
         this.channelCount = 3;
@@ -54,7 +55,7 @@ class Ykush {
         return Ykush._runYkushCmd(args, this.logger);
     }
 
-    static async list(logger) {
+    static async list(logger = dummyLogger) {
         return Ykush._list(logger);
     }
 
@@ -80,4 +81,5 @@ class Ykush {
 
 Ykush.execa = execa;
 Ykush.YkushCmd = YkushCmd;
+Ykush.dummyLogger = dummyLogger;
 module.exports = Ykush;

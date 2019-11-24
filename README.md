@@ -11,20 +11,37 @@ Based on [ykushcmd](https://github.com/Yepkit/ykush).
 
 ## Requirements
 * linux, win64 or macos
-* node 8, 10 or 12
+* node 10 or 12
+
+**linux**
+* libusb: `sudo apt install -y libusb-1.0-0`
+* udev rules to be able to use ykush without root access
+
+    [Here](bin/linux/install_udev.sh) is simple udev rule installation script. To install it just run:
+    ```
+    curl -sL https://github.com/OpenTMI/ykushjs/raw/master/bin/linux/install_udev.sh | sudo bash -
+    ```
 
 
 ## API
 
 ```js
 (() => async function() {
-    const Ykush = require('Ykush');
-    const listOfSerialNumbers = await Ykush.detect();
+    const {Ykush, Ykushxs} = require('Ykush');
+    
+    // ykush
+    let listOfSerialNumbers = await Ykush.list();
     const ykush = new Ykush(listOfSerialNumbers[0]);
     await ykush.powerOn({channel: 1});
     await ykush.powerOff({channel: 1});
     await ykush.powerAllOn();
     await ykush.powerAllOff();
     console.log(ykush.serialNumber);
+    
+    // ykushxs
+    listOfSerialNumbers = await Ykushxs.list();
+    const ykushxs = new Ykushxs(listOfSerialNumbers[0]);
+    await ykushxs.powerOn();
+    await ykushxs.powerOff();
 }())();
 ```
