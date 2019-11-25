@@ -44,12 +44,12 @@ describe('Ykush', function () {
     it('powerAllOn', async function () {
         const ykush = new Ykush('123');
         await ykush.powerAllOn();
-        expect(Ykush.execa.calledOnceWith('ykushcmd', ['-s', '123', '-u'])).to.be.true;
+        expect(Ykush.execa.calledOnceWith('ykushcmd', ['-s', '123', '-u', 'a'])).to.be.true;
     });
     it('powerAllOff', async function () {
         const ykush = new Ykush('123');
         await ykush.powerAllOff();
-        expect(Ykush.execa.calledOnceWith('ykushcmd', ['-s', '123', '-d'])).to.be.true;
+        expect(Ykush.execa.calledOnceWith('ykushcmd', ['-s', '123', '-d', 'a'])).to.be.true;
     });
     it('powerOn', async function () {
         const ykush = new Ykush('123');

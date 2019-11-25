@@ -1,6 +1,6 @@
 {
   "name": "ykushjs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Yepkit Ykush control library",
   "scripts": {
     "test": "NODE_ENV=test mocha --recursive --reporter spec",
@@ -32,7 +32,8 @@
   "homepage": "https://github.com/opentmi/ykushjs#readme",
   "dependencies": {
     "execa": "^2.1.0",
-    "invariant": "^2.2.4"
+    "invariant": "^2.2.4",
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",

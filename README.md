@@ -43,5 +43,17 @@ Based on [ykushcmd](https://github.com/Yepkit/ykush).
     const ykushxs = new Ykushxs(listOfSerialNumbers[0]);
     await ykushxs.powerOn();
     await ykushxs.powerOff();
-}())();
+    
+    // ykush3
+    listOfSerialNumbers = await Ykush3.list();
+    const ykush3 = new Ykushxs(listOfSerialNumbers[0]);
+    await ykush3.powerOn({channel: 1});
+    await ykush3.powerOff({channel: 1});
+    await ykush3.reset();
+    await ykush3.switchOn5V()
+    await ykush3.switchOff5V()
+    await ykush3.writeGPIO({gpio: 1, state: 0})
+    await ykush3.writeGPIO({gpio: 1, state: 1})
+
+})();
 ```

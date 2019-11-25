@@ -2,16 +2,15 @@ const path = require('path');
 // 3rd party modules
 const execa = require('execa');
 const invariant = require('invariant');
+const debug = require('debug')('Ykush');
 
 const ykushcmdPath = path.join(__dirname, '..', 'bin', process.platform);
 const YkushCmd = path.join(ykushcmdPath, 'ykushcmd');
-const dummyLogger = {debug: () => {}, silly: () => {}};
 
 
 class Ykush {
-    constructor(serialNumber, {logger = dummyLogger} = {}) {
+    constructor(serialNumber) {
         this._serialNumber = serialNumber;
-        this.logger = logger;
         this.channelCount = 3;
         this._prefix = [];
     }
@@ -20,48 +19,49 @@ class Ykush {
         return this._serialNumber;
     }
 
-    static async _runYkushCmd(args, logger) {
+    static async _runYkushCmd(args) {
         const cmd = Ykush.YkushCmd;
-        logger.debug(`ykush cmd: 'cmd ${args.join(' ')}'`);
+        debug(`ykush cmd: 'cmd ${args.join(' ')}'`);
         const {stdout} = await Ykush.execa(cmd, args);
-        logger.silly(`stdout: ${stdout}`);
+        debug(`stdout: ${stdout}`);
         return {stdout};
     }
 
     async powerAllOn() {
-        const args = [...this._prefix, '-s', this._serialNumber, '-u'];
-        return Ykush._runYkushCmd(args, this.logger);
+        const args = [...this._prefix, '-s', this._serialNumber, '-u', 'a'];
+        return Ykush._runYkushCmd(args);
     }
 
     async powerAllOff() {
-        const args = [...this._prefix, '-s', this._serialNumber, '-d'];
-        return Ykush._runYkushCmd(args, this.logger);
+        const args = [...this._prefix, '-s', this._serialNumber, '-d', 'a'];
+        return Ykush._runYkushCmd(args);
     }
 
     _validateChannel(channel) {
+        channel = parseInt(channel, 10); // eslint-disable-line no-param-reassign
         invariant(channel > 0, 'invalid channel');
         invariant(channel <= this.channelCount, `allowed channels are 1..${this.channelCount}`);
     }
 
     async powerOn({channel}) {
         this._validateChannel(channel);
-        const args = ['-s', this._serialNumber, '-u', `${channel}`];
-        return Ykush._runYkushCmd(args, this.logger);
+        const args = [...this._prefix, '-s', this._serialNumber, '-u', `${channel}`];
+        return Ykush._runYkushCmd(args);
     }
 
     async powerOff({channel}) {
         this._validateChannel(channel);
-        const args = ['-s', this._serialNumber, '-d', `${channel}`];
-        return Ykush._runYkushCmd(args, this.logger);
+        const args = [...this._prefix, '-s', this._serialNumber, '-d', `${channel}`];
+        return Ykush._runYkushCmd(args);
     }
 
-    static async list(logger = dummyLogger) {
-        return Ykush._list(logger);
+    static async list() {
+        return Ykush._list();
     }
 
-    static async _list(logger, prefix = []) {
+    static async _list(prefix = []) {
         const args = [...prefix, '-l'];
-        const {stdout} = await Ykush._runYkushCmd(args, logger);
+        const {stdout} = await Ykush._runYkushCmd(args);
         return Ykush._parseList(stdout);
     }
 
@@ -81,5 +81,4 @@ class Ykush {
 
 Ykush.execa = execa;
 Ykush.YkushCmd = YkushCmd;
-Ykush.dummyLogger = dummyLogger;
 module.exports = Ykush;
