@@ -1,18 +1,13 @@
-const path = require('path');
 // 3rd party modules
 const execa = require('execa');
 const invariant = require('invariant');
 const debug = require('debug')('Ykush');
 
-const ykushcmdPath = path.join(__dirname, '..', 'bin', process.platform);
-const includedYkushCmd = path.join(ykushcmdPath, 'ykushcmd');
-
 class Ykush {
-    constructor(serialNumber, ykushCmd = includedYkushCmd) {
+    constructor(serialNumber) {
         this._serialNumber = serialNumber;
         this.channelCount = 3;
         this._prefix = [];
-        Ykush.YkushCmd = ykushCmd;
     }
 
     get serialNumber() {
@@ -80,5 +75,4 @@ class Ykush {
 }
 
 Ykush.execa = execa;
-Ykush.YkushCmd = includedYkushCmd;
 module.exports = Ykush;

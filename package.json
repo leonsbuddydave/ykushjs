@@ -31,9 +31,10 @@
   },
   "homepage": "https://github.com/opentmi/ykushjs#readme",
   "dependencies": {
+    "debug": "^4.3.1",
     "execa": "^2.1.0",
     "invariant": "^2.2.4",
-    "debug": "^4.3.1"
+    "ykushjs": "github:leonsbuddydave/ykushjs"
   },
   "devDependencies": {
     "chai": "^4.2.0",
